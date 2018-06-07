@@ -11,21 +11,21 @@ return {
 		{
 			["setting_name"] = "mode",
 			["widget_type"] = "dropdown",
-			["text"] = "Friendly Fire Indicator",
+			["text"] = "Indicator",
 			["tooltip"] = "",
 			["options"] = {
-				{ text = "Enabled", value = 1 }, --1
-				{ text = "Disabled", value = 2 }, --2
-				{ text = "Threshold", value = 3 }, --3
+				{ text = "Always Enabled", value = 1 }, --1
+				{ text = "Always Disabled", value = 2 }, --2
+				{ text = "Only Above Threshold", value = 3 }, --3
 			},
-			["default_value"] = 2,
+			["default_value"] = 3,
 			["sub_widgets"] = {
 				{
 					["show_widget_condition"] = {3},
 					["setting_name"] = "threshold",
 					["widget_type"] = "numeric",
 					["text"] = "Damage Threshold",
-					["tooltip"] = "Damage lower than this will not show the indicator",
+					["tooltip"] = "Damage lower than this will not show the red arrow indicator",
 					["range"] = {0, 30},
 					["default_value"] = 3,
 				},

@@ -12,7 +12,7 @@ mod:hook("PlayerUnitHealthExtension.add_damage", function (func, self, attacker_
 	count = count + 1
 	if DamageUtils.is_player_unit(attacker_unit) then
 		if (mod:get("mode") == 3 and damage_amount < mod:get("threshold")) or mod:get("mode") == 2 then
-			mod:echo("dmg " .. tostring(count) .. " " .. damage_type .." " .. tostring(damage_amount))
+			-- mod:echo("dmg " .. tostring(count) .. " " .. damage_type .." " .. tostring(damage_amount))  -- debug
 			damage_type = "temporary_health_degen"  -- this damage type doesn't show the direction indicator
 		end
 	end
