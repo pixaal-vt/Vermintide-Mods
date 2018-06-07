@@ -1,0 +1,11 @@
+mod = [
+	"Friendly Fire Tweaks"
+]
+
+package = [
+	"resource_packages/Friendly Fire Tweaks/Friendly Fire Tweaks"
+]
+
+lua = [
+	"scripts/mods/Friendly Fire Tweaks/*"
+]
