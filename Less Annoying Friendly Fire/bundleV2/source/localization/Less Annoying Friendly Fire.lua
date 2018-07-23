@@ -1,9 +1,9 @@
 return {
 	mod_description = {
-		en = "Disable the annoying red arrow indicators for friendly fire, or only show them when damage is higher than a threshold (e.g. not for weak hagbae/burning ticks)"
+		en = "Less Annoying Friendly Fire"
 	},
 --[[
-	some_other_text_id = {
+	some_text_id = {
 		en = "Translation",        -- English
 		fr = "Translation",        -- French
 		de = "Translation",        -- German
@@ -12,6 +12,16 @@ return {
 		it = "Translation",        -- Italian
 		pl = "Translation",        -- Polish
 		["br-pt"] = "Translation", -- Portuguese-Brazil
+	},
+	some_other_text_id = {
+		en = "Translation",
+		fr = "Translation",
+		de = "Translation",
+		es = "Translation",
+		ru = "Translation",
+		it = "Translation",
+		pl = "Translation",
+		["br-pt"] = "Translation",
 	},
 --]]
 }

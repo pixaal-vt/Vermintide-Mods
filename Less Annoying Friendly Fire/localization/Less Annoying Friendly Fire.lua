@@ -1,6 +1,6 @@
 return {
 	mod_description = {
-		en = "Friendly Fire Tweaks description"
+		en = "Less Annoying Friendly Fire"
 	},
 --[[
 	some_text_id = {

@@ -1,8 +1,8 @@
-local mod = get_mod("Friendly Fire Tweaks")
+local mod = get_mod("Less Annoying Friendly Fire")
 
 -- Everything here is optional. You can remove unused parts.
 return {
-	name = "Friendly Fire Tweaks",                  -- Readable mod name
+	name = "Less Annoying Friendly Fire",           -- Readable mod name
 	description = mod:localize("mod_description"),  -- Mod description
 	is_togglable = true,                            -- If the mod can be enabled/disabled
 	is_mutator = false,                             -- If the mod is mutator

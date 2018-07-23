@@ -1,0 +1,11 @@
+mod = [
+	"Less Annoying Friendly Fire"
+]
+
+package = [
+	"resource_packages/Less Annoying Friendly Fire/Less Annoying Friendly Fire"
+]
+
+lua = [
+	"scripts/mods/Less Annoying Friendly Fire/*"
+]
