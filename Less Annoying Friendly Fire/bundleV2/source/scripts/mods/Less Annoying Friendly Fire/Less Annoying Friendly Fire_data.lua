@@ -31,5 +31,12 @@ return {
 				},
 			},
 		},
+		{
+			["setting_name"] = "debug",
+			["widget_type"] = "checkbox",
+			["text"] = "Debug Mode",
+			["tooltip"] = "Show FF damage numbers in chat.",
+			["default_value"] = true,
+		},
 	}
 }
