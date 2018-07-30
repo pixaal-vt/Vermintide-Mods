@@ -1,6 +1,6 @@
-/bundleV2
-/core
-/resource_packages
+bundleV2/
+core/
+resource_packages/
 .temp
 /testymoddy
 /thisisjustatest
