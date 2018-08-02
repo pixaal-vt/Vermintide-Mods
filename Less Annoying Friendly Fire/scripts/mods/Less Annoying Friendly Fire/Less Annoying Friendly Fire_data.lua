@@ -36,7 +36,7 @@ return {
 			["widget_type"] = "checkbox",
 			["text"] = "Debug Mode",
 			["tooltip"] = "Show FF damage numbers in chat.",
-			["default_value"] = true,
+			["default_value"] = false,
 		},
 	}
 }
