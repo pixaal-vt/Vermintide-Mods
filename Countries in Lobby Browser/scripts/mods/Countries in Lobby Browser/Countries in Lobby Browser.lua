@@ -1,5 +1,12 @@
 local mod = get_mod("Countries in Lobby Browser")
 
+--[[
+    Functions
+--]]
+
+local function starts_with(str, start)
+    return str:sub(1, #start) == start
+end
 
 --[[
     Hooks
@@ -28,9 +35,12 @@ mod:hook(LobbyItemsList, "populate_lobby_list", function(func, self, lobbies, ..
         ---- End copy pasta ----
 
         if continue then
-            modded_title = '['..lobby_data.country_code..'] ' .. title_text
-            lobby_data.server_name = modded_title  -- 'server_name' is the first name that create_lobby_list_entry_content will use out of 'server_name', 'unique_server_name', 'name' and 'host'
-            -- It's safe to modify lobby_data.server_name as it is only used for display in the lobby browser
+            country_code_text = '['..lobby_data.country_code..'] '
+            if not starts_with(title_text, country_code_text) then
+                modded_title = country_code_text .. title_text
+                lobby_data.server_name = modded_title  -- 'server_name' is the first name that create_lobby_list_entry_content will use out of 'server_name', 'unique_server_name', 'name' and 'host'
+                -- It's safe to modify lobby_data.server_name as it is only used for display in the lobby browser
+            end
         end
     end
 
