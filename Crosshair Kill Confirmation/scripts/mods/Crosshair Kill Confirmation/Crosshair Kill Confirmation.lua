@@ -43,10 +43,10 @@ mod.create_gui = function(self)
         )
 
         -- Fetch mod settings
-        crosshairs["normal"] = mod:get("crosshair_normal")
-        crosshairs["special"] = mod:get("crosshair_special")
-        crosshairs["elite"] = mod:get("crosshair_elite")
-        crosshairs["boss"] = mod:get("crosshair_boss")
+        for i=1, #unit_types, 1 do
+            unit_type = unit_types[i]
+            crosshairs[unit_type] = mod:get("crosshair_"..unit_type)
+        end
         duration = mod:get("duration")
         min_s = mod:get("size")
         max_s = min_s * mod:get("pop")
@@ -112,8 +112,8 @@ mod.unit_category = function(unit)
     breed_categories["chaos_exalted_champion_warcamp"] = "boss"
     breed_categories["chaos_exalted_sorcerer"] = "boss"
 
-    local blackboard = BLACKBOARDS[unit]
-    local breed_name = blackboard.breed.name
+    local breed_data = Unit.get_data(unit, "breed")
+    breed_name = breed_data.name
     if breed_categories[breed_name] then
         return breed_categories[breed_name]
     else
@@ -130,7 +130,7 @@ end
 
 mod.interp_opacity = function(opacity)
     -- Modify opacity to have exponetial falloff
-    return math.floor(math.pow(opacity/255, 4)*255)
+    return math.floor(math.pow(opacity/255,2)*255)
 end
 
 mod.interp_size = function(size)
@@ -142,27 +142,25 @@ end
 --[[
     Hooks
 --]]
-mod.add_damage_hook = function(func, self, attacker_unit, damage_amount, ...)    
-    local health_extension = ScriptUnit.extension(self.unit, "health_system")
-    local alive = health_extension:is_alive()
-    local old_health = health_extension:current_health()
-    local new_health = old_health - damage_amount
-    local killing_blow = false
-    if new_health <= 0 and old_health > 0 then
-        killing_blow = true
-    end
+mod:hook(GenericHitReactionExtension, "_execute_effect", function(func, self, unit, effect_template, biggest_hit, parameters, ...)
+    local death_ext = self.death_extension
+    local death_has_started = death_ext and death_ext.death_has_started
+    local killing_blow = parameters.death and death_ext and not death_has_started
+
+    local attacker_unit = biggest_hit[DamageDataIndex.ATTACKER]
+    local damage_amount = biggest_hit[DamageDataIndex.DAMAGE_AMOUNT]
 
     mod:pcall(function()
         local local_player = Managers.player:local_player()
         local player_unit = local_player.player_unit
         local network_manager = Managers.state.network
-        local unit_id, is_level_unit = network_manager:game_object_or_level_id(self.unit)
+        local unit_id, is_level_unit = network_manager:game_object_or_level_id(unit)
 
-        if DamageUtils.is_player_unit(attacker_unit) and damage_amount > 0 and (not is_level_unit) then
+        if DamageUtils.is_player_unit(attacker_unit) and damage_amount > 0 then
             if (not killing_blow) and attacker_unit == player_unit then
                 assists[unit_id] = 1
             elseif killing_blow and (attacker_unit == player_unit or assists[unit_id]) then
-                local unit_type = mod.unit_category(self.unit)
+                local unit_type = mod.unit_category(unit)
                 opacities[unit_type] = 255
                 sizes[unit_type] = 0
                 colors[unit_type] = {255, 25, 25}
@@ -172,20 +170,20 @@ mod.add_damage_hook = function(func, self, attacker_unit, damage_amount, ...)
                         colors[unit_type] = {7, 150, 210}
                     end
                     assists[unit_id] = nil  -- Remove from table
+                    -- TODO clear assists periodically as units can die from other causes
+                    -- TODO show assists from non-player causes (e.g. gunner fire, barrel explosions...)
                 end
             end
         end
     end)
 
-    func(self, attacker_unit, damage_amount, ...)
-end
-mod:hook(GenericHealthExtension, "add_damage", mod.add_damage_hook)
-mod:hook(RatOgreHealthExtension, "add_damage", mod.add_damage_hook)
-mod:echo("[Crosshair Kill Confirmation] You can safely ignore that warning :)")  -- VMF falsely thinks we're hooking the same thing twice, but we're not. See https://discordapp.com/channels/404978161726783489/440564700451831829/524551941628493835
+
+    func(self, unit, effect_template, biggest_hit, parameters, ...)
+end)
 
 mod:hook(StateInGameRunning, "on_exit", function(func, ...)
     func(...)
-    -- Flush unit tables for new map
+    -- Flush table for new map
     assists = {}
 end)
 
