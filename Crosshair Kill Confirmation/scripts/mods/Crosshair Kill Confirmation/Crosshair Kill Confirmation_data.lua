@@ -46,6 +46,7 @@ return {
 				{text="Square", value="square"},
 				{text="Triangle", value="triangle"},
 				{text="Heart", value="heart"},
+				{text="None", value="none"},
 			},
 		},
 		{
@@ -62,6 +63,7 @@ return {
 				{text="Square", value="square"},
 				{text="Triangle", value="triangle"},
 				{text="Heart", value="heart"},
+				{text="None", value="none"},
 			},
 		},
 		{
@@ -78,6 +80,7 @@ return {
 				{text="Square", value="square"},
 				{text="Triangle", value="triangle"},
 				{text="Heart", value="heart"},
+				{text="None", value="none"},
 			},
 		},
 		{
@@ -94,6 +97,7 @@ return {
 				{text="Square", value="square"},
 				{text="Triangle", value="triangle"},
 				{text="Heart", value="heart"},
+				{text="None", value="none"},
 			},
 		},
 	}

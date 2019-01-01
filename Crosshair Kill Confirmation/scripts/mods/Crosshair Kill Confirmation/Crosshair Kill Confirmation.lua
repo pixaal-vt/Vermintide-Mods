@@ -191,18 +191,20 @@ mod:hook_safe(CrosshairUI, "update_hit_markers", function(self, dt)
     end
     for i=1, #unit_types, 1 do
         unit_type = unit_types[i]
-        opacities[unit_type] = math.max(0, opacities[unit_type] - (dt/duration)*255)
-        interp_opacity = mod.interp_opacity(opacities[unit_type])
-        if unit_type == "normal" then
-            interp_size = min_s*0.79  -- no animation for normal enemies
-        else
-            sizes[unit_type] = sizes[unit_type] + (dt/duration)
-            interp_size = mod.interp_size(sizes[unit_type])
+        if crosshairs[unit_type] ~= "none" then
+            opacities[unit_type] = math.max(0, opacities[unit_type] - (dt/duration)*255)
+            interp_opacity = mod.interp_opacity(opacities[unit_type])
+            if unit_type == "normal" then
+                interp_size = min_s*0.79  -- no animation for normal enemies
+            else
+                sizes[unit_type] = sizes[unit_type] + (dt/duration)
+                interp_size = mod.interp_size(sizes[unit_type])
+            end
+            local icon_size = math.floor(interp_size * RESOLUTION_LOOKUP.scale)
+            local icon_x = math.floor(RESOLUTION_LOOKUP.res_w/2 - icon_size/2)  -- Center icon
+            local icon_y = math.floor(RESOLUTION_LOOKUP.res_h/2 - icon_size/2)  -- Center icon
+            Gui.bitmap(mod.gui, crosshairs[unit_type], Vector2(icon_x, icon_y), Vector2(icon_size, icon_size), Color(interp_opacity,colors[unit_type][1],colors[unit_type][2],colors[unit_type][3]))
         end
-        local icon_size = math.floor(interp_size * RESOLUTION_LOOKUP.scale)
-        local icon_x = math.floor(RESOLUTION_LOOKUP.res_w/2 - icon_size/2)  -- Center icon
-        local icon_y = math.floor(RESOLUTION_LOOKUP.res_h/2 - icon_size/2)  -- Center icon
-        Gui.bitmap(mod.gui, crosshairs[unit_type], Vector2(icon_x, icon_y), Vector2(icon_size, icon_size), Color(interp_opacity,colors[unit_type][1],colors[unit_type][2],colors[unit_type][3]))
     end
 end)
 
