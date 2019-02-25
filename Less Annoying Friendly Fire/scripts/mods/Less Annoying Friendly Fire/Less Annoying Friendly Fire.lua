@@ -3,7 +3,7 @@ local mod = get_mod("Less Annoying Friendly Fire")
 --[[ TODO
     Show damage number next to portait
     Damage threshold for green crosshair
-    Damage threshold for voicelines
+    Make frame opacity directly affected by damage amount. Then no threshold is needed as it will become more opaque the more damage in a short period is done.
 ]]--
 
 local state = {

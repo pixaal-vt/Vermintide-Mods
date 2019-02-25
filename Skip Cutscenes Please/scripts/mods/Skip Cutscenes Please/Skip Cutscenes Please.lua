@@ -14,6 +14,9 @@ Original license:
 
 local mod = get_mod("Skip Cutscenes Please")
 
+--[[ TODO
+    Automatically skip every cutscene after you've seen it once before.
+]]--
 
 mod.skip_next_fade = false -- Track the need to skip the fade effect
 mod.players_with_mod = {} -- Track which players use this mod 
@@ -26,9 +29,9 @@ mod.debug_print = function(self, text)
     end
 end
 
-mod:command("skip", "Skip", function(...)
-    mod:debug_print("hello!")
-end)
+-- mod:command("skip", "Skip", function(...)
+--     mod:debug_print("hello!")
+-- end)
 
 
 -- Skip fade when applicable
