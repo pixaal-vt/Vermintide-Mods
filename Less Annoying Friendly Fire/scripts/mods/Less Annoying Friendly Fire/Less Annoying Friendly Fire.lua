@@ -1,9 +1,17 @@
 local mod = get_mod("Less Annoying Friendly Fire")
 
+--[[ TODO
+    Show damage number next to portait
+    Damage threshold for green crosshair
+    Damage threshold for voicelines
+]]--
+
 local state = {
     STARTING = 1,
     ONGOING = 2
 }
+local ignore_this_ff = {}
+
 -- These are used to pass data to the widget draw function
 local recent_damage_amount = 0
 local recent_health = 100
@@ -60,6 +68,12 @@ mod.nice_unit_name = function(u)
     return name
 end
 
+mod.debug_print = function(s)
+    if (mod:get("debug")) then
+        mod:echo(s)
+    end
+end
+
 
 --[[
     Hooks
@@ -89,14 +103,12 @@ mod:hook(DamageIndicatorGui, "update", function(func, self, dt)
                 local damage_amount = damage_info[DamageDataIndex.DAMAGE_AMOUNT]
 
                 if damage_amount >= 0 then  -- Ignore damage with negative amounts, not sure what that is, maybe natural bond?
-                    if (mod:get("debug")) then
-                        mod:pcall(function ()
-                            if damage_info[DamageDataIndex.DAMAGE_SOURCE_NAME] ~= "temporary_health_degen" then
-                                mod:echo("DMG: " .. tostring(damage_amount) .. " (" .. damage_info[DamageDataIndex.DAMAGE_SOURCE_NAME] .. ") " .. (mod.nice_unit_name(attacker) or "nil"))
-                            end
-                            return 
-                        end)
-                    end
+                    mod:pcall(function ()
+                        if damage_info[DamageDataIndex.DAMAGE_SOURCE_NAME] ~= "temporary_health_degen" then
+                            mod.debug_print("DMG: " .. tostring(damage_amount) .. " (" .. damage_info[DamageDataIndex.DAMAGE_SOURCE_NAME] .. ") " .. (mod.nice_unit_name(attacker) or "nil"))
+                        end
+                        return 
+                    end)
 
                     local was_pushed = false
                     if mod:get("hide_pushes") and damage_amount == 0 and (not DamageUtils.is_player_unit(attacker)) then
@@ -233,6 +245,40 @@ mod:hook(UnitFrameUI, "draw", function(func, self, dt)
     return func(self, dt)
 end)
 
+mod:hook(PlayerUnitHealthExtension, "add_damage", function (func, self, attacker_unit, damage_amount, hit_zone_name, damage_type, damage_direction, damage_source_name, hit_ragdoll_actor, damaging_unit, hit_react_type, is_critical_strike, added_dot)
+
+    mod:pcall(function()
+        if DamageUtils.is_player_unit(attacker_unit) then
+            if damage_type ~= "temporary_health_degen" then
+                cur_time = os.time() -- Current time in seconds
+                if ignore_this_ff[cur_time] ~= nil then
+                    ignore_this_ff[cur_time] = ignore_this_ff[cur_time] + damage_amount
+                else
+                    ignore_this_ff[cur_time] = damage_amount
+                end
+                mod.debug_print("Total: "..tostring(ignore_this_ff[cur_time]).." This: "..tostring(damage_amount))
+            end
+        end
+    end)
+
+    return func(self, attacker_unit, damage_amount, hit_zone_name, damage_type, damage_direction, damage_source_name, hit_ragdoll_actor, damaging_unit, hit_react_type, is_critical_strike, added_dot)
+end)
+
+mod:hook(WwiseWorld, "trigger_event", function(func, ...)
+    local arg = {...}
+    if string.match(arg[2], "friendly_fire") then
+        local cur_time = os.time()
+        damage_threshold = 3.5 -- TODO make dynamic
+        if ignore_this_ff[cur_time] ~= nil then
+            if ignore_this_ff[cur_time] <= damage_threshold then
+                mod.debug_print("Blocked FF dialog")
+                ignore_this_ff[cur_time] = nil
+                return -1, -1
+            end
+        end
+    end
+    return func(...)
+end)
 
 
 --[[
