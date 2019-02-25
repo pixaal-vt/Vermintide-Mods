@@ -135,7 +135,7 @@ end
 
 mod.interp_size = function(size)
     -- Modify size to have exponetial falloff
-    return math.min(max_s, (math.pow(size, 0.5)*(max_s-min_s))+min_s)
+    return (math.pow(size, 0.6)*(max_s-min_s))+min_s
 end
 
 
@@ -149,6 +149,8 @@ mod:hook(GenericHitReactionExtension, "_execute_effect", function(func, self, un
 
     local attacker_unit = biggest_hit[DamageDataIndex.ATTACKER]
     local damage_amount = biggest_hit[DamageDataIndex.DAMAGE_AMOUNT]
+    local damage_type = biggest_hit[DamageDataIndex.DAMAGE_TYPE]
+    local hit_zone = biggest_hit[DamageDataIndex.HIT_ZONE]
 
     mod:pcall(function()
         local local_player = Managers.player:local_player()
@@ -158,21 +160,38 @@ mod:hook(GenericHitReactionExtension, "_execute_effect", function(func, self, un
 
         if DamageUtils.is_player_unit(attacker_unit) and damage_amount > 0 then
             if (not killing_blow) and attacker_unit == player_unit then
-                assists[unit_id] = 1
+                assists[unit_id] = os.time()
             elseif killing_blow and (attacker_unit == player_unit or assists[unit_id]) then
                 local unit_type = mod.unit_category(unit)
-                opacities[unit_type] = 255
-                sizes[unit_type] = 0
-                colors[unit_type] = {255, 25, 25}
-                
-                if assists[unit_id] then
-                    if attacker_unit ~= player_unit then
-                        colors[unit_type] = {7, 150, 210}
+
+                if attacker_unit == player_unit then
+                    sizes[unit_type] = 0
+
+                    if opacities[unit_type] < 200 then -- Low priority color - Avoid overriding a previous hit color instantly
+                        colors[unit_type] = {255, 25, 25} -- Red for normal kills
                     end
-                    assists[unit_id] = nil  -- Remove from table
-                    -- TODO clear assists periodically as units can die from other causes
+
+                    if damage_type == "arrow_poison_dot" or damage_type == "bleed" or damage_type == "burninating" then
+                        if opacities[unit_type] < 200 then -- Low priority color
+                            colors[unit_type] = {170, 25, 255} -- Purple for poison/dot kills
+                        end
+                    end
+                    if hit_zone == "head" or hit_zone == "weakspot" then
+                        colors[unit_type] = {255, 100, 25} -- Orange for headshot kills
+                    end                
+
+                    opacities[unit_type] = 255
+                elseif assists[unit_id] ~= nil then
+                    if (os.time() - assists[unit_id]) <= 30 then -- Ignore assists older than 30 seconds
+                        sizes[unit_type] = 0
+                        if opacities[unit_type] < 200 then -- Low priority color
+                            colors[unit_type] = {7, 150, 210} -- Blue for assist kills
+                        end
+                        opacities[unit_type] = 255
+                    end
                     -- TODO show assists from non-player causes (e.g. gunner fire, barrel explosions...)
                 end
+                assists[unit_id] = nil  -- Remove assist from table
             end
         end
     end)
@@ -195,7 +214,7 @@ mod:hook_safe(CrosshairUI, "update_hit_markers", function(self, dt)
             opacities[unit_type] = math.max(0, opacities[unit_type] - (dt/duration)*255)
             interp_opacity = mod.interp_opacity(opacities[unit_type])
             if unit_type == "normal" then
-                interp_size = min_s*0.79  -- no animation for normal enemies
+                interp_size = min_s*0.8  -- no animation for normal enemies
             else
                 sizes[unit_type] = sizes[unit_type] + (dt/duration)
                 interp_size = mod.interp_size(sizes[unit_type])
