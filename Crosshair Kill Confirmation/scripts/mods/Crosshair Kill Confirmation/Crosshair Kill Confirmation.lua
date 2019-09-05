@@ -74,6 +74,9 @@ mod.unit_category = function(unit)
     breed_categories["chaos_marauder"] = "normal"
     breed_categories["chaos_marauder_with_shield"] = "normal"
     breed_categories["chaos_fanatic"] = "normal"
+    breed_categories["beastmen_gor"] = "normal"
+    breed_categories["beastmen_ungor"] = "normal"
+    breed_categories["beastmen_ungor_archer"] = "normal"
     breed_categories["critter_rat"] = "normal"
     breed_categories["critter_pig"] = "normal"
 
@@ -85,12 +88,15 @@ mod.unit_category = function(unit)
     breed_categories["chaos_corruptor_sorcerer"] = "special"
     breed_categories["skaven_warpfire_thrower"] = "special"
     breed_categories["skaven_loot_rat"] = "special"
+    breed_categories["skaven_explosive_loot_rat"] = "special"
     breed_categories["chaos_tentacle"] = "special"
     breed_categories["chaos_tentacle_sorcerer"] = "special"
     breed_categories["chaos_plague_sorcerer"] = "special"
     breed_categories["chaos_plague_wave_spawner"] = "special"
     breed_categories["chaos_vortex"] = "special"
     breed_categories["chaos_dummy_sorcerer"] = "special"
+    breed_categories["beastmen_standard_bearer"] = "special"
+    breed_categories["beastmen_standard_bearer_crater"] = "special"
 
     breed_categories["skaven_storm_vermin"] = "elite"
     breed_categories["skaven_storm_vermin_commander"] = "elite"
@@ -99,6 +105,7 @@ mod.unit_category = function(unit)
     breed_categories["chaos_berzerker"] = "elite"
     breed_categories["chaos_raider"] = "elite"
     breed_categories["chaos_warrior"] = "elite"
+    breed_categories["beastmen_bestigor"] = "elite"
     
     breed_categories["skaven_rat_ogre"] = "boss"
     breed_categories["skaven_stormfiend"] = "boss"
@@ -111,6 +118,7 @@ mod.unit_category = function(unit)
     breed_categories["chaos_exalted_champion"] = "boss"
     breed_categories["chaos_exalted_champion_warcamp"] = "boss"
     breed_categories["chaos_exalted_sorcerer"] = "boss"
+    breed_categories["beastmen_minotaur"] = "boss"
 
     local breed_data = Unit.get_data(unit, "breed")
     breed_name = breed_data.name
