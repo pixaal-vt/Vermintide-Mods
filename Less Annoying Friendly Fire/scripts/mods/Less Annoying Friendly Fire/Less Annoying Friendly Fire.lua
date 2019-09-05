@@ -265,10 +265,11 @@ mod:hook(PlayerUnitHealthExtension, "add_damage", function (func, self, attacker
 end)
 
 mod:hook(WwiseWorld, "trigger_event", function(func, ...)
+    -- TODO only works for damage you do to people - people still hear their own voicline
     local arg = {...}
     if string.match(arg[2], "friendly_fire") then
         local cur_time = os.time()
-        damage_threshold = 3.5 -- TODO make dynamic
+        damage_threshold = 2.5 -- TODO make dynamic, 5% of missing health
         if ignore_this_ff[cur_time] ~= nil then
             if ignore_this_ff[cur_time] <= damage_threshold then
                 mod.debug_print("Blocked FF dialog")
