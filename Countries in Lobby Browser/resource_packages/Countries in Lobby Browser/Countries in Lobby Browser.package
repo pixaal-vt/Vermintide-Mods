@@ -1,0 +1,11 @@
+mod = [
+	"Countries in Lobby Browser"
+]
+
+package = [
+	"resource_packages/Countries in Lobby Browser/Countries in Lobby Browser"
+]
+
+lua = [
+	"scripts/mods/Countries in Lobby Browser/*"
+]

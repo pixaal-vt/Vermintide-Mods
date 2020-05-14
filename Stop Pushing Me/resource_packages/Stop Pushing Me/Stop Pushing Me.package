@@ -1,0 +1,11 @@
+mod = [
+	"Stop Pushing Me"
+]
+
+package = [
+	"resource_packages/Stop Pushing Me/Stop Pushing Me"
+]
+
+lua = [
+	"scripts/mods/Stop Pushing Me/*"
+]

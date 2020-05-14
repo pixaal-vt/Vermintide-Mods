@@ -1,0 +1,15 @@
+mod = [
+	"Crosshair Kill Confirmation"
+]
+
+package = [
+	"resource_packages/Crosshair Kill Confirmation/Crosshair Kill Confirmation"
+]
+
+lua = [
+	"scripts/mods/Crosshair Kill Confirmation/*"
+]
+
+material = [
+  "materials/Crosshair Kill Confirmation/*"
+]

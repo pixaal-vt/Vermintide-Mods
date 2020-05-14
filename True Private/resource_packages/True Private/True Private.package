@@ -1,0 +1,11 @@
+mod = [
+	"True Private"
+]
+
+package = [
+	"resource_packages/True Private/True Private"
+]
+
+lua = [
+	"scripts/mods/True Private/*"
+]

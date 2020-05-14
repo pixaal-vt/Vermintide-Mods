@@ -1,0 +1,11 @@
+mod = [
+	"Skip Cutscenes Please"
+]
+
+package = [
+	"resource_packages/Skip Cutscenes Please/Skip Cutscenes Please"
+]
+
+lua = [
+	"scripts/mods/Skip Cutscenes Please/*"
+]
