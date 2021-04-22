@@ -33,7 +33,8 @@ mod:hook(LobbyItemsList, "remove_invalid_lobbies", function(func, self, lobbies)
     for lobby_id, lobby_data in pairs(lobbies) do
         i = i + 1
         local title_text = lobby_data.server_name or lobby_data.unique_server_name or lobby_data.name or lobby_data.host
-        if string.find(filter, lobby_data.country_code) or filter == "" then
+
+        if filter == "" or (lobby_data.country_code ~= nil and string.find(filter, lobby_data.country_code)) then
             filtered_lobbies[#filtered_lobbies + 1] = lobbies[i]
         end
     end
